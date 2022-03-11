@@ -1,0 +1,27 @@
+body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:center;
+    position: absolute;
+    background-color: #00d1b2;
+
+}
+
+.flash{padding: 5px;}
+.flash.success{
+    border: 1px solid #21DB56;
+    background: #AEFFC5;
+}
+.flash.error{
+    border: 1px solid #FF4343;
+    background: #FF9C9C;
+}
+
+.invalid{
+    color: red;
+}
+.invalid.feedback{
+    color: red;
+}
