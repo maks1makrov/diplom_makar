@@ -6,8 +6,9 @@
 {% for m in messages %}
 <h3 class="text-danger">{{ m }}</h3>
 {% endfor %}
-    <h1> Tемы материалов </h1>
-{% for m in materials %}
-    <a href="{% url 'show_material' material_id=m.id %}">{{ m.name }}</a>
-{% endfor %}
+
+    <h1>Материал</h1>
+    <h3>{{ material.name }}</h3>
+    <h3>{{ material.text }}</h3>
+    <a href="{% url 'konspect' %}">Составить конспект</a>
 {% endblock%}

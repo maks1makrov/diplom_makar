@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from classroom.models import Materials, KonspectOne
+
+admin.site.register(Materials)
+admin.site.register(KonspectOne)

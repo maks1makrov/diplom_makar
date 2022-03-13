@@ -1,0 +1,16 @@
+
+{% extends "main.html" %}
+{% block title%}added{% endblock%}
+
+{% block body%}
+{% for m in messages %}
+<h3 class="text-danger">{{ m }}</h3>
+{% endfor %}
+<h1> конспект</h1>
+
+    <p>что такое идеология - {{ form.ideologia }}<br></p>
+    <p><a href="{{ form.link }}">Кто ввел в научный оборот понятие «идеология»? - ссылка <br></a></p>
+    <p>Когда наука об обществе становится идеологией{{ form.since }}<br></p>
+    <p>Сформулируйте понятие «политическая идеология» {{ form.polit_ideologia }}<br></p>
+
+{% endblock%}

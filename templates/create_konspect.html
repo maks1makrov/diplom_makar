@@ -1,0 +1,19 @@
+
+{% extends "main.html" %}
+{% block title%}added{% endblock%}
+
+{% block body%}
+{% for m in messages %}
+<h3 class="text-danger">{{ m }}</h3>
+{% endfor %}
+<h1>Составить конспект</h1>
+<form action="{% url 'konspect' %}" method="post">
+    {% csrf_token %}
+    <p>что такое идеология - {{ form.ideologia }}<br></p>
+    <p>Кто ввел в научный оборот понятие «идеология»? вставь ссылку - {{ form.link }}<br></p>
+    <p>Когда наука об обществе становится идеологией (записать краткий
+        ответ){{ form.since }}<br></p>
+    <p>Сформулируйте понятие «политическая идеология»{{ form.polit_ideologia }}<br></p>
+    <button type="submit"   class="btn btn-primary btn-sm">OK</button>
+</form>
+{% endblock%}
