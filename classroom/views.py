@@ -73,7 +73,11 @@ class CheckView(View):
 class KonspectView(View):
 
     def get(self, request):
-        if KonspectOne.objects.get(user=request.user):
+        try:
+            konspect = KonspectOne.objects.get(user=request.user)
+        except:
+            konspect = None
+        if konspect:
             return redirect('show_konspect')
         form = KonspectOneForm()
         return render(request, 'create_konspect.html', {"form": form})
