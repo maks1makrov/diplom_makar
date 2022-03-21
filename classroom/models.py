@@ -12,3 +12,14 @@ class KonspectOne(models.Model):
     link = models.URLField()
     since = models.CharField(max_length=150)
     polit_ideologia = models.CharField(max_length=150)
+
+
+class Question(models.Model):
+    material = models.ForeignKey(Materials, on_delete=models.PROTECT, verbose_name='тема')
+    text = models.TextField(verbose_name="вопрос")
+
+
+class Answer(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.PROTECT)
+    answer = models.TextField(verbose_name='ответ')
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
