@@ -14,12 +14,12 @@ class KonspectOne(models.Model):
     polit_ideologia = models.CharField(max_length=150)
 
 
-class Question(models.Model):
-    material = models.ForeignKey(Materials, on_delete=models.PROTECT, verbose_name='тема')
+class QuestionForKonspect(models.Model):
+    material = models.ForeignKey(Materials, on_delete=models.PROTECT, verbose_name='тема', related_name="questions")
     text = models.TextField(verbose_name="вопрос")
 
 
-class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.PROTECT)
+class AnswerForKonspect(models.Model):
+    question = models.ForeignKey(QuestionForKonspect, on_delete=models.PROTECT)
     answer = models.TextField(verbose_name='ответ')
     user = models.ForeignKey(User, on_delete=models.PROTECT)

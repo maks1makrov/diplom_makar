@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import CreateView
 
 from classroom.forms import KonspectOneForm
-from classroom.models import Materials, KonspectOne
+from classroom.models import Materials, KonspectOne, QuestionForKonspect, AnswerForKonspect
 
 
 # @method_decorator(login_required, name='dispatch')
@@ -42,7 +42,8 @@ class MaterialView(View):
 
     def get(self, request, material_id):
         material = Materials.objects.get(id=material_id)
-        return render(request, 'show_material.html', {"material": material})
+        questions = QuestionForKonspect.objects.filter(material_id=material_id)
+        return render(request, 'show_material.html', {"material": material, 'questions': questions})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -97,5 +98,16 @@ class KonspectView(View):
 class ShowKonspectView(View):
 
     def get(self, request):
+        form = KonspectOne.objects.get(user=request.user)
+        return render(request, 'show_konspect.html', {"form": form})
+
+
+class QuestionsKonspectView(View):
+
+    def post(self, request):
+        data = request.POST.dict()
+        data.pop('csrfmiddlewaretoken')
+        for i in data.items():
+            AnswerForKonspect.objects.create(question_id=i[0], answer=i[1], user=request.user)
         form = KonspectOne.objects.get(user=request.user)
         return render(request, 'show_konspect.html', {"form": form})

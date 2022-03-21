@@ -26,4 +26,5 @@ urlpatterns = [
     path('show_konspect/', views.ShowKonspectView.as_view(), name='show_konspect'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('material/<int:material_id>', views.MaterialView.as_view(), name='show_material'),
+    path('questions_konspect/', views.QuestionsKonspectView.as_view(), name='questions_konspect'),
 ]

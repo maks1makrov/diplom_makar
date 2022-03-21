@@ -11,4 +11,13 @@
     <h3>{{ material.name }}</h3>
     <h3>{{ material.text }}</h3>
     <a href="{% url 'konspect' %}">Составить конспект</a>
+
+<h1>Составить конспект</h1>
+<form action="{% url 'questions_konspect' %}" method="post">
+    {% csrf_token %}
+    {% for q in questions %}
+        <p>{{ q.text }} <input type="text" name="{{ q.id }}"/><br></p>
+    {% endfor %}
+    <button type="submit"   class="btn btn-primary btn-sm">OK</button>
+</form>
 {% endblock%}
