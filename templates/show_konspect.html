@@ -8,9 +8,7 @@
 {% endfor %}
 <h1> конспект</h1>
 
-    <p>что такое идеология - {{ form.ideologia }}<br></p>
-    <p><a href="{{ form.link }}">Кто ввел в научный оборот понятие «идеология»? - ссылка <br></a></p>
-    <p>Когда наука об обществе становится идеологией{{ form.since }}<br></p>
-    <p>Сформулируйте понятие «политическая идеология» {{ form.polit_ideologia }}<br></p>
-
+    {% for q in Answer_questions %}
+        <p>{{ q.question.text }} {{ q.answer }}"/><br></p>
+    {% endfor %}
 {% endblock%}

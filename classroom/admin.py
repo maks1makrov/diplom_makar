@@ -3,7 +3,7 @@ from django.contrib import admin
 from classroom.models import Materials, KonspectOne, QuestionForKonspect, AnswerForKonspect
 
 admin.site.register(Materials)
-admin.site.register(KonspectOne)
+admin.site.register(AnswerForKonspect)
 
 class AnswerAdmin(admin.StackedInline):
     model = AnswerForKonspect
@@ -13,3 +13,4 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerAdmin]
 
 admin.site.register(QuestionForKonspect, QuestionAdmin)
+

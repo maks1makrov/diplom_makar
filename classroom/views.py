@@ -19,6 +19,13 @@ class ShowAll(View):
         if request.user.is_authenticated:
             response = {}
             response['materials'] = Materials.objects.all()
+            check_list = []
+            for material in response['materials']:
+                answer_questions = AnswerForKonspect.objects.filter(user=request.user, question__material_id=material.id)
+                check_list.append(answer_questions)
+            if all(check_list):
+                response['all'] = True
+            response['all'] = False
             return render(request, "show_all.html", response)
         else:
             return redirect("login")
@@ -43,7 +50,11 @@ class MaterialView(View):
     def get(self, request, material_id):
         material = Materials.objects.get(id=material_id)
         questions = QuestionForKonspect.objects.filter(material_id=material_id)
-        return render(request, 'show_material.html', {"material": material, 'questions': questions})
+        try:
+            Answer_questions = AnswerForKonspect.objects.filter(user=request.user, question__material_id=material_id)
+        except:
+            Answer_questions = False
+        return render(request, 'show_material.html', {"material": material, 'questions': questions, "Answer_questions": Answer_questions})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -70,44 +81,44 @@ class CheckView(View):
 #         context['konspect'] = KonspectOne.objects.get(user=self.request)
 #         return context
 
-@method_decorator(login_required, name='dispatch')
-class KonspectView(View):
-
-    def get(self, request):
-        try:
-            konspect = KonspectOne.objects.get(user=request.user)
-        except:
-            konspect = None
-        if konspect:
-            return redirect('show_konspect')
-        form = KonspectOneForm()
-        return render(request, 'create_konspect.html', {"form": form})
-
-    def post(self, request):
-        form = KonspectOneForm(data=request.POST)
-        if form.is_valid():
-            nf = form.save(commit=False)
-            nf.user_id = request.user.id
-            nf.save()
-            return redirect('show_konspect')
-        messages.error(request, message="некорректный ввод")
-        return render(request, 'create_konspect.html', {"form": form})
+# @method_decorator(login_required, name='dispatch')
+# class KonspectView(View):
+#
+#     def get(self, request):
+#         try:
+#             konspect = KonspectOne.objects.get(user=request.user)
+#         except:
+#             konspect = None
+#         if konspect:
+#             return redirect('show_konspect')
+#         form = KonspectOneForm()
+#         return render(request, 'create_konspect.html', {"form": form})
+#
+#     def post(self, request):
+#         form = KonspectOneForm(data=request.POST)
+#         if form.is_valid():
+#             nf = form.save(commit=False)
+#             nf.user_id = request.user.id
+#             nf.save()
+#             return redirect('show_konspect')
+#         messages.error(request, message="некорректный ввод")
+#         return render(request, 'create_konspect.html', {"form": form})
 
 
 @method_decorator(login_required, name='dispatch')
 class ShowKonspectView(View):
 
-    def get(self, request):
-        form = KonspectOne.objects.get(user=request.user)
-        return render(request, 'show_konspect.html', {"form": form})
+    def get(self, request, material_id):
+        Answer_questions = AnswerForKonspect.objects.filter(user=request.user, question__material_id=material_id)
+        return render(request, 'show_konspect.html', {"Answer_questions": Answer_questions})
 
 
 class QuestionsKonspectView(View):
 
-    def post(self, request):
+    def post(self, request, material_id):
         data = request.POST.dict()
         data.pop('csrfmiddlewaretoken')
         for i in data.items():
             AnswerForKonspect.objects.create(question_id=i[0], answer=i[1], user=request.user)
-        form = KonspectOne.objects.get(user=request.user)
-        return render(request, 'show_konspect.html', {"form": form})
+        Answer_questions = AnswerForKonspect.objects.filter(user=request.user, question__material_id=material_id)
+        return render(request, 'show_konspect.html', {"Answer_questions": Answer_questions})

@@ -10,4 +10,9 @@
 {% for m in materials %}
     <a href="{% url 'show_material' material_id=m.id %}">{{ m.name }}</a>
 {% endfor %}
+{% if all %}
+    <a> показать итоговый конспект</a>
+{% else %}
+    <a>  итоговый конспект не готов - заполните конспекты по всем темам </a>
+{% endif %}
 {% endblock%}

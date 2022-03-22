@@ -10,14 +10,19 @@
     <h1>Материал</h1>
     <h3>{{ material.name }}</h3>
     <h3>{{ material.text }}</h3>
-    <a href="{% url 'konspect' %}">Составить конспект</a>
 
+{% if Answer_questions %}
+    {% for q in Answer_questions %}
+        <p>{{ q.question.text }} {{ q.answer }}"/><br></p>
+    {% endfor %}
+{% else %}
 <h1>Составить конспект</h1>
-<form action="{% url 'questions_konspect' %}" method="post">
+<form action="{% url 'questions_konspect' material_id=material.id %}" method="post">
     {% csrf_token %}
     {% for q in questions %}
         <p>{{ q.text }} <input type="text" name="{{ q.id }}"/><br></p>
     {% endfor %}
     <button type="submit"   class="btn btn-primary btn-sm">OK</button>
 </form>
+{% endif %}
 {% endblock%}

@@ -22,9 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.ShowAll.as_view(), name='show_all'),
     path('check/', views.CheckView.as_view(), name='check'),
-    path('konspect/', views.KonspectView.as_view(), name='konspect'),
     path('show_konspect/', views.ShowKonspectView.as_view(), name='show_konspect'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('material/<int:material_id>', views.MaterialView.as_view(), name='show_material'),
-    path('questions_konspect/', views.QuestionsKonspectView.as_view(), name='questions_konspect'),
+    path('questions_konspect/<int:material_id>', views.QuestionsKonspectView.as_view(), name='questions_konspect'),
 ]
