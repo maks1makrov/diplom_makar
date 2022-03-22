@@ -9,7 +9,8 @@ from django.views import View
 from django.views.generic import CreateView
 
 from classroom.forms import KonspectOneForm
-from classroom.models import Materials, KonspectOne, QuestionForKonspect, AnswerForKonspect
+from classroom.models import Materials, KonspectOne, QuestionForKonspect, AnswerForKonspect, TestName, TestQuestion, \
+    TestAnswer, TestAnswerResponse, TestResult
 
 
 # @method_decorator(login_required, name='dispatch')
@@ -21,11 +22,10 @@ class ShowAll(View):
             response['materials'] = Materials.objects.all()
             check_list = []
             for material in response['materials']:
-                answer_questions = AnswerForKonspect.objects.filter(user=request.user, question__material_id=material.id)
+                answer_questions = AnswerForKonspect.objects.filter(user=request.user,
+                                                                    question__material_id=material.id)
                 check_list.append(answer_questions)
-            if all(check_list):
-                response['all'] = True
-            response['all'] = False
+            response['all'] = True if all(check_list) else False
             return render(request, "show_all.html", response)
         else:
             return redirect("login")
@@ -44,6 +44,7 @@ class LoginView(View):
         messages.error(request, message="login or password is not correct")
         return redirect('login')
 
+
 @method_decorator(login_required, name='dispatch')
 class MaterialView(View):
 
@@ -54,7 +55,8 @@ class MaterialView(View):
             Answer_questions = AnswerForKonspect.objects.filter(user=request.user, question__material_id=material_id)
         except:
             Answer_questions = False
-        return render(request, 'show_material.html', {"material": material, 'questions': questions, "Answer_questions": Answer_questions})
+        return render(request, 'show_material.html',
+                      {"material": material, 'questions': questions, "Answer_questions": Answer_questions})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -69,6 +71,7 @@ class CheckView(View):
             return redirect('show_all')
         messages.error(request, message="стыдно! неуч! пробуй еще!")
         return redirect('check')
+
 
 # @method_decorator(login_required, name='dispatch')
 # class KonspectView(CreateView):
@@ -122,3 +125,39 @@ class QuestionsKonspectView(View):
             AnswerForKonspect.objects.create(question_id=i[0], answer=i[1], user=request.user)
         Answer_questions = AnswerForKonspect.objects.filter(user=request.user, question__material_id=material_id)
         return render(request, 'show_konspect.html', {"Answer_questions": Answer_questions})
+
+
+class ItogKonspectView(View):
+
+    def get(self, request):
+        Answer_questions = AnswerForKonspect.objects.filter(user=request.user)
+        return render(request, 'itog_konspect.html', {"Answer_questions": Answer_questions})
+
+
+class AllTestsView(View):
+    def get(self, request):
+        tests = TestName.objects.all()
+        return render(request, 'all_tests.html', {"tests": tests})
+
+
+class ShowTestView(View):
+    def get(self, request, test_id):
+        questions = TestQuestion.objects.filter(test_id=test_id)
+        Answer_questions = TestAnswerResponse.objects.filter(user=request.user, answer__question__test_id=test_id)
+        try:
+            result = TestResult.objects.get(user=request.user, test_id=test_id)
+        except:
+            result = False
+        return render(request, 'show_test.html',
+                      {'questions': questions, "Answer_questions": Answer_questions, "test_id": test_id, 'result': result})
+
+    def post(self, request, test_id):
+        data = request.POST.dict()
+        data.pop('csrfmiddlewaretoken')
+        for i in data.items():
+            TestAnswerResponse.objects.create(answer_id=i[1], user=request.user)
+        Answer_questions = TestAnswerResponse.objects.filter(user=request.user, answer__question__test_id=test_id)
+        result_list = [a.is_correct for a in Answer_questions]
+        result_in_prec = sum(result_list) / len(result_list) * 100
+        test_result = TestResult.objects.create(user=request.user, result=result_in_prec, test_id=test_id)
+        return redirect('show_test', test_id)

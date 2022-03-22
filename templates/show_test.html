@@ -1,0 +1,29 @@
+{% extends "main.html" %}
+{% block title%}test{% endblock%}
+
+{% block body%}
+
+{% for m in messages %}
+<h3 class="text-danger">{{ m }}</h3>
+{% endfor %}
+
+
+{% if Answer_questions %}
+    {% for q in Answer_questions %}
+        <p>{{ q.answer.question.text }} {{  q.answer.text }} ( {{ q.is_correct }} )<br></p>
+    {% endfor %}
+    ВАШ РЕЗУЛЬТАТ - {{ result.result|floatformat:2 }} %
+{% else %}
+<h1>Тест {{ q.answer.question.test.name }} </h1>
+<form action="{% url 'show_test' test_id=test_id %}" method="post">
+    {% csrf_token %}
+    {% for q in questions %}
+        <p>{{ q.text }}</p>
+            {% for a in q.answers.all %}
+            <input type="radio" name="{{ q }}" value="{{ a.id }}"/> {{ a.text }}
+            {% endfor %}
+    {% endfor %}
+    <button type="submit"   class="btn btn-primary btn-sm">OK</button>
+</form>
+{% endif %}
+{% endblock%}

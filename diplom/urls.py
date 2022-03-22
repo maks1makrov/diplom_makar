@@ -26,4 +26,7 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('material/<int:material_id>', views.MaterialView.as_view(), name='show_material'),
     path('questions_konspect/<int:material_id>', views.QuestionsKonspectView.as_view(), name='questions_konspect'),
+    path('itog_konspect/', views.ItogKonspectView.as_view(), name='itog_konspect'),
+    path('all_tests/', views.AllTestsView.as_view(), name='all_tests'),
+    path('show_test/<int:test_id>', views.ShowTestView.as_view(), name='show_test'),
 ]
