@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from classroom.models import Materials, KonspectOne, QuestionForKonspect, AnswerForKonspect, TestName, TestQuestion, \
+from classroom.models import Materials, QuestionForKonspect, AnswerForKonspect, TestName, TestQuestion, \
     TestAnswer, TestAnswerResponse, TestResult
 
 admin.site.register(Materials)

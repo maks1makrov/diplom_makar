@@ -9,12 +9,12 @@ class Materials(models.Model):
     def __str__(self):
         return self.name
 
-class KonspectOne(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-    ideologia = models.CharField(max_length=150)
-    link = models.URLField()
-    since = models.CharField(max_length=150)
-    polit_ideologia = models.CharField(max_length=150)
+# class KonspectOne(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.PROTECT)
+#     ideologia = models.CharField(max_length=150)
+#     link = models.URLField()
+#     since = models.CharField(max_length=150)
+#     polit_ideologia = models.CharField(max_length=150)
 
 
 class QuestionForKonspect(models.Model):

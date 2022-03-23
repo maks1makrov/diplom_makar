@@ -8,8 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import CreateView
 
-from classroom.forms import KonspectOneForm
-from classroom.models import Materials, KonspectOne, QuestionForKonspect, AnswerForKonspect, TestName, TestQuestion, \
+from classroom.models import Materials, QuestionForKonspect, AnswerForKonspect, TestName, TestQuestion, \
     TestAnswer, TestAnswerResponse, TestResult
 
 
